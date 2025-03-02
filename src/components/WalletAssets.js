@@ -61,6 +61,7 @@ const WalletAssets = ({ onAssetsLoaded }) => {
   const [filteredTokens, setFilteredTokens] = useState({ urlFiltered: 0, symbolFiltered: 0 });
   const [priceData, setPriceData] = useState({});
   const [isRateLimited, setIsRateLimited] = useState(false);
+  const [initialFetchDone, setInitialFetchDone] = useState(false);
 
   // Memoize a single provider to reduce connection overhead
   const provider = useMemo(() =>
@@ -488,7 +489,8 @@ const WalletAssets = ({ onAssetsLoaded }) => {
         
         // Try to use cached data if available
         try {
-          const cachedData = sessionStorage.getItem(cacheKey);
+          const priceCacheKey = 'price-data-cache';
+          const cachedData = sessionStorage.getItem(priceCacheKey);
           if (cachedData) {
             const { data } = JSON.parse(cachedData);
             console.log('Using cached price data due to rate limiting');
@@ -617,7 +619,23 @@ const WalletAssets = ({ onAssetsLoaded }) => {
       
       // Call the onAssetsLoaded callback with the assets data
       if (onAssetsLoaded && typeof onAssetsLoaded === 'function') {
-        onAssetsLoaded(assetsWithValue);
+        console.log('WalletAssets - Calling onAssetsLoaded with:', assetsWithValue);
+        console.log('WalletAssets - Total netWorth calculated:', totalNetWorth);
+        
+        // Make sure all assets have usdValue property
+        const assetsWithUsdValue = assetsWithValue.map(asset => {
+          if (asset.usdValue === undefined) {
+            const price = prices[asset.symbol] ? prices[asset.symbol].price : 0;
+            const balance = parseFloat(asset.balance);
+            return {
+              ...asset,
+              usdValue: !isNaN(balance) && price ? balance * price : 0
+            };
+          }
+          return asset;
+        });
+        
+        onAssetsLoaded(assetsWithUsdValue);
       }
       setLoadingProgress(100);
     } catch (err) {
@@ -670,7 +688,7 @@ const WalletAssets = ({ onAssetsLoaded }) => {
     updateNetWorth
   ]);
 
-  // Fetch assets on component mount and when address or connection status changes
+  // Fetch assets only on component mount or when address changes
   useEffect(() => {
     // Skip fetching if we've hit a rate limit
     if (isRateLimited) {
@@ -678,8 +696,18 @@ const WalletAssets = ({ onAssetsLoaded }) => {
       return;
     }
     
-    fetchAssets();
-  }, [fetchAssets, isRateLimited]);
+    // Only fetch once when the component mounts or when address changes
+    if (!initialFetchDone || address) {
+      console.log('Performing asset fetch');
+      fetchAssets();
+      setInitialFetchDone(true);
+    }
+    
+    // Cleanup function to prevent memory leaks
+    return () => {
+      console.log('Cleaning up asset fetch effect');
+    };
+  }, [address, isRateLimited, initialFetchDone]);
 
   // Render loading state with progress
   if (isLoading) {

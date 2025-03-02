@@ -20,6 +20,17 @@ function App() {
 
   // Callback function to receive assets from WalletAssets component
   const handleAssetsLoaded = (assets) => {
+    console.log('App - Assets loaded:', assets);
+    
+    // Calculate total value for debugging
+    let totalValue = 0;
+    assets.forEach(asset => {
+      if (asset.usdValue && !isNaN(asset.usdValue)) {
+        totalValue += asset.usdValue;
+      }
+    });
+    console.log('App - Total calculated value:', totalValue);
+    
     setUserAssets(assets);
   };
 

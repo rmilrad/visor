@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import './PortfolioOptimizer.css';
 import { useWallet } from '../context/WalletContext';
 
@@ -10,6 +10,12 @@ import { useWallet } from '../context/WalletContext';
 const PortfolioOptimizer = ({ userAssets = [] }) => {
   // Use the global wallet context for netWorth
   const { netWorth, formatCurrency, lastUpdated, assetBreakdown } = useWallet();
+  
+  // Log netWorth changes for debugging
+  useEffect(() => {
+    console.log('PortfolioOptimizer - netWorth:', netWorth);
+    console.log('PortfolioOptimizer - assetBreakdown:', assetBreakdown);
+  }, [netWorth, assetBreakdown]);
   
   // Format the last updated time
   const formatLastUpdated = (date) => {
@@ -23,15 +29,52 @@ const PortfolioOptimizer = ({ userAssets = [] }) => {
     }).format(date);
   };
   
+  // Calculate total value from userAssets for comparison
+  const calculateTotalFromAssets = () => {
+    let total = 0;
+    userAssets.forEach(asset => {
+      if (asset.usdValue && !isNaN(asset.usdValue)) {
+        total += asset.usdValue;
+      }
+    });
+    return total;
+  };
+  
+  // Log asset values for debugging
+  useEffect(() => {
+    if (userAssets && userAssets.length > 0) {
+      console.log('PortfolioOptimizer - User assets:', userAssets);
+      console.log('PortfolioOptimizer - Calculated total from assets:', calculateTotalFromAssets());
+    }
+  }, [userAssets]);
+  
   // Fallback to calculating from userAssets if netWorth is not available
   const portfolioSummary = useMemo(() => {
-    // If we have global netWorth, use it
-    if (netWorth > 0) {
+    // Calculate total from assets for comparison
+    const totalFromAssets = calculateTotalFromAssets();
+    
+    console.log('PortfolioOptimizer - Comparing netWorth vs totalFromAssets:', netWorth, totalFromAssets);
+    
+    // If we have global netWorth and it's reasonable, use it
+    if (netWorth > 0 && (totalFromAssets === 0 || Math.abs(netWorth - totalFromAssets) / netWorth < 0.1)) {
+      console.log('PortfolioOptimizer - Using global netWorth:', netWorth);
       return {
         totalValue: netWorth,
         assetCount: assetBreakdown.totalAssets || userAssets.length,
         assetsWithValue: assetBreakdown.assetsWithValue || 0,
         assetsWithoutValue: assetBreakdown.assetsWithoutValue || 0,
+        hasValueData: true
+      };
+    }
+    
+    // If netWorth seems off but we have asset data, use that instead
+    if (totalFromAssets > 0) {
+      console.log('PortfolioOptimizer - Using calculated total from assets:', totalFromAssets);
+      return {
+        totalValue: totalFromAssets,
+        assetCount: userAssets.length,
+        assetsWithValue: userAssets.filter(a => a.usdValue && !isNaN(a.usdValue)).length,
+        assetsWithoutValue: userAssets.filter(a => !a.usdValue || isNaN(a.usdValue)).length,
         hasValueData: true
       };
     }
@@ -78,7 +121,7 @@ const PortfolioOptimizer = ({ userAssets = [] }) => {
       assetsWithoutValue,
       hasValueData: assetsWithValue > 0
     };
-  }, [netWorth, assetBreakdown, userAssets]);
+  }, [netWorth, assetBreakdown, userAssets, calculateTotalFromAssets]);
 
   // If no assets, show a message
   if (!userAssets || userAssets.length === 0) {

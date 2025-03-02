@@ -15,14 +15,18 @@ export const WalletProvider = ({ children }) => {
 
   // Update net worth and related data
   const updateNetWorth = (value, breakdown = {}) => {
+    console.log(`Updating netWorth to: ${value}`);
+    
+    // Use functional updates to avoid stale state issues
     setNetWorth(value);
     setLastUpdated(new Date());
     
     if (breakdown) {
-      setAssetBreakdown({
-        ...assetBreakdown,
+      console.log(`Updating asset breakdown:`, breakdown);
+      setAssetBreakdown(prevBreakdown => ({
+        ...prevBreakdown,
         ...breakdown
-      });
+      }));
     }
   };
 
