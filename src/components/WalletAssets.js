@@ -60,6 +60,7 @@ const WalletAssets = ({ onAssetsLoaded }) => {
   const [loadingStatus, setLoadingStatus] = useState('');
   const [filteredTokens, setFilteredTokens] = useState({ urlFiltered: 0, symbolFiltered: 0 });
   const [priceData, setPriceData] = useState({});
+  const [isRateLimited, setIsRateLimited] = useState(false);
 
   // Memoize a single provider to reduce connection overhead
   const provider = useMemo(() =>
@@ -127,6 +128,22 @@ const WalletAssets = ({ onAssetsLoaded }) => {
       return result;
     } catch (err) {
       console.error('Error fetching from Etherscan:', err);
+      
+      // Check if this is a rate limiting error
+      const isRateLimitError =
+        err.message?.includes('rate limit') ||
+        err.message?.includes('too many requests') ||
+        err.message?.includes('429') ||
+        (err.response?.status === 429);
+      
+      if (isRateLimitError) {
+        console.warn('Etherscan rate limit detected');
+        setIsRateLimited(true);
+        
+        // Return empty array instead of throwing to allow the app to continue
+        return [];
+      }
+      
       throw new Error(`Failed to fetch token data: ${err.message}`);
     }
   }, []);
@@ -457,6 +474,31 @@ const WalletAssets = ({ onAssetsLoaded }) => {
       return priceData;
     } catch (error) {
       console.error('Error in fetch prices process:', error);
+      
+      // Check if this is a rate limiting error
+      const isRateLimitError =
+        error.message?.includes('rate limit') ||
+        error.message?.includes('too many requests') ||
+        error.message?.includes('429') ||
+        (error.response?.status === 429);
+      
+      if (isRateLimitError) {
+        console.warn('Price API rate limit detected');
+        setIsRateLimited(true);
+        
+        // Try to use cached data if available
+        try {
+          const cachedData = sessionStorage.getItem(cacheKey);
+          if (cachedData) {
+            const { data } = JSON.parse(cachedData);
+            console.log('Using cached price data due to rate limiting');
+            return data;
+          }
+        } catch (e) {
+          console.warn('Error parsing cached price data:', e);
+        }
+      }
+      
       return {};
     }
   }, [delay]);
@@ -580,7 +622,39 @@ const WalletAssets = ({ onAssetsLoaded }) => {
       setLoadingProgress(100);
     } catch (err) {
       console.error('Error fetching assets:', err);
-      setError(`Failed to fetch wallet assets: ${err.message}`);
+      
+      // Check if this is a rate limiting error
+      const isRateLimitError =
+        err.message?.includes('rate limit') ||
+        err.message?.includes('too many requests') ||
+        err.message?.includes('429');
+      
+      if (isRateLimitError) {
+        console.warn('Rate limit detected, will use cached data and stop refreshing');
+        setIsRateLimited(true);
+        
+        // Try to use cached data if available
+        try {
+          const cachedPriceData = sessionStorage.getItem('price-data-cache');
+          if (cachedPriceData) {
+            const { data } = JSON.parse(cachedPriceData);
+            setPriceData(data);
+            console.log('Using cached price data due to rate limiting');
+          }
+          
+          // If we have some assets already, keep displaying them
+          if (assets.length > 0) {
+            setError('Rate limit reached. Displaying cached data.');
+          } else {
+            setError('Rate limit reached. Please try again later.');
+          }
+        } catch (cacheErr) {
+          console.error('Error using cached data:', cacheErr);
+          setError('Rate limit reached and no cached data available. Please try again later.');
+        }
+      } else {
+        setError(`Failed to fetch wallet assets: ${err.message}`);
+      }
     } finally {
       setIsLoading(false);
       setLoadingStatus('');
@@ -592,13 +666,20 @@ const WalletAssets = ({ onAssetsLoaded }) => {
     fetchTokenData,
     processTokenTransactions,
     fetchTokenBalances,
-    fetchPriceData
+    fetchPriceData,
+    updateNetWorth
   ]);
 
   // Fetch assets on component mount and when address or connection status changes
   useEffect(() => {
+    // Skip fetching if we've hit a rate limit
+    if (isRateLimited) {
+      console.log('Skipping asset fetch due to rate limiting');
+      return;
+    }
+    
     fetchAssets();
-  }, [fetchAssets]);
+  }, [fetchAssets, isRateLimited]);
 
   // Render loading state with progress
   if (isLoading) {
