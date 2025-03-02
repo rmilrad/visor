@@ -1,0 +1,87 @@
+.lending-data {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* Table container with fixed height and scrolling */
+.lending-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #333; /* Add text color to ensure it's readable */
+  display: block;
+  max-height: calc(100vh - 250px); /* Limit height to viewport minus some space for headers */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Table header and cells */
+.lending-table th,
+.lending-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  color: #333; /* Ensure text is black/dark */
+}
+
+/* Sticky header that stays visible while scrolling */
+.lending-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #555;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Fix for border-radius with overflow */
+.lending-table thead tr:first-child th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.lending-table thead tr:first-child th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.lending-table tr:last-child td {
+  border-bottom: none;
+}
+
+.lending-table tr:hover {
+  background-color: #f5f8ff;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.error-message {
+  text-align: center;
+  padding: 20px;
+  color: #d9534f;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+/* Highest APR indicator (yellow star) */
+.highest-apr {
+  position: relative;
+}
+
+.highest-apr::after {
+  content: "★";
+  color: #FFD700; /* Gold/yellow color */
+  font-size: 1.2em;
+  margin-left: 8px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}

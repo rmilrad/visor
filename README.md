@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# Web3 Wallet Connect Demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a React application that demonstrates how to integrate RainbowKit for connecting Web3 wallets.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Connect to multiple Web3 wallets using RainbowKit
+- Support for multiple chains (Ethereum, Polygon, Optimism, Arbitrum)
+- User-friendly wallet connection interface
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js (v14 or later)
+- npm or yarn
+- A WalletConnect Project ID (get one from [WalletConnect Cloud](https://cloud.walletconnect.com))
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup
 
-### `npm test`
+1. Clone this repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Create a `.env` file in the root directory with your WalletConnect Project ID:
+   ```
+   REACT_APP_WALLET_CONNECT_PROJECT_ID=YOUR_PROJECT_ID
+   ```
+   Replace `YOUR_PROJECT_ID` with the actual Project ID from WalletConnect Cloud.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Running the Application
 
-### `npm run build`
+Start the development server:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The application will be available at [http://localhost:3000](http://localhost:3000) (or another port if 3000 is already in use).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## How to Use
 
-### `npm run eject`
+1. Open the application in your browser
+2. Click the "Connect Wallet" button in the top-right corner
+3. Select your preferred wallet from the list
+4. Follow the wallet's instructions to connect
+5. Once connected, you'll see your wallet address and balance
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Technologies Used
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [React](https://reactjs.org/)
+- [RainbowKit](https://www.rainbowkit.com/)
+- [wagmi](https://wagmi.sh/)
+- [viem](https://viem.sh/)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Supported Chains
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Ethereum Mainnet
+- Sepolia (Ethereum Testnet)
+- Polygon
+- Optimism
+- Arbitrum
+
+## Supported Wallets
+
+RainbowKit supports a wide range of wallets including:
+
+- MetaMask
+- Rainbow
+- Coinbase Wallet
+- WalletConnect
+- And many more!
+
+## Customization
+
+You can customize the supported chains by modifying the `chains` array in `src/index.js`.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [RainbowKit Documentation](https://www.rainbowkit.com/docs/introduction)
+- [wagmi Documentation](https://wagmi.sh/)
+- [viem Documentation](https://viem.sh/)

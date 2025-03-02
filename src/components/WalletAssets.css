@@ -1,0 +1,299 @@
+/* Main wallet assets container */
+.wallet-assets {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Headings */
+.wallet-assets h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Wallet address display */
+.wallet-address {
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #adb5bd;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.wallet-address a {
+  color: #61dafb;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.wallet-address a:hover {
+  text-decoration: underline;
+  color: #8ae2ff;
+}
+
+/* Filter info section */
+.filter-info {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.filter-info p {
+  color: #ffc107;
+  font-size: 0.85rem;
+  margin: 0;
+  padding: 0 !important;
+  text-align: left !important;
+  animation: none !important;
+}
+
+/* Asset list container with scrolling */
+.asset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-height: calc(100vh - 250px); /* Limit height to viewport minus some space for headers */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 5px; /* Add some padding for the scrollbar */
+}
+
+/* Individual asset item */
+.asset-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.asset-item:hover {
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Asset information */
+.asset-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.asset-name {
+  font-weight: 500;
+  color: white;
+}
+
+.asset-symbol {
+  color: #adb5bd;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.asset-link {
+  color: #61dafb;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.asset-link:hover {
+  text-decoration: underline;
+  color: #8ae2ff;
+}
+
+/* Asset details container */
+.asset-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Asset balance display */
+.asset-balance {
+  font-weight: 600;
+  color: #61dafb;
+  font-size: 1.1rem;
+}
+
+/* Asset price information */
+.asset-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.price-value {
+  font-weight: 500;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.price-change {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.price-change.positive {
+  color: #4caf50; /* Green for positive change */
+}
+
+.price-change.negative {
+  color: #f44336; /* Red for negative change */
+}
+
+/* Total USD value display */
+.asset-total-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffc107; /* Gold/yellow color for total value */
+  margin-top: 4px;
+  background-color: rgba(255, 193, 7, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+/* Error message styling */
+.error {
+  color: #ff6b6b;
+  text-align: center;
+  background-color: rgba(255, 107, 107, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+/* Loading state */
+.wallet-assets p {
+  text-align: center;
+  padding: 10px;
+}
+
+/* Loading status message */
+.loading-status {
+  color: #adb5bd;
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0 !important;
+  text-align: center;
+}
+
+/* Loading bar styles */
+.loading-bar {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 10px 0 20px;
+}
+
+.loading-progress {
+  height: 100%;
+  background-color: #61dafb;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .wallet-assets {
+    padding: 16px;
+    margin-top: 16px;
+  }
+  
+  .asset-item {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .asset-details {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+  
+  .asset-balance {
+    font-size: 1rem;
+  }
+  
+  .asset-price {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+  }
+  
+  .asset-total-value {
+    margin-top: 2px;
+    font-size: 0.8rem;
+    padding: 1px 6px;
+  }
+  
+  .asset-info {
+    width: 100%;
+  }
+  
+  .loading-bar {
+    height: 6px;
+  }
+  
+  .filter-info {
+    padding: 8px 12px;
+  }
+}
+
+/* Animation for loading state */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.wallet-assets p:not(.error):not(.loading-status):not(.filter-info p) {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Loading progress animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.loading-progress {
+  background: linear-gradient(
+    90deg, 
+    #61dafb 0%, 
+    #8ae2ff 25%, 
+    #61dafb 50%, 
+    #8ae2ff 75%, 
+    #61dafb 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}

@@ -1,38 +1,106 @@
+/* Main app container */
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
   background-color: #282c34;
   min-height: 100vh;
+  color: white;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Wallet container with max width */
+.wallet-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Header with flex layout */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #444;
+  width: 100%;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* Connect prompt styling */
+.connect-prompt {
+  margin-top: 100px;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Content container for side-by-side layout */
+.content-container {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Left panel for wallet assets */
+.left-panel {
+  flex: 1;
+  min-width: 0; /* Prevent flex item from overflowing */
+}
+
+/* Right panel for staking opportunities */
+.right-panel {
+  flex: 1;
+  min-width: 0; /* Prevent flex item from overflowing */
+}
+
+/* Component spacing - keeping for backwards compatibility */
+.wallet-assets {
+  margin-bottom: 0; /* Changed from 30px since we're using side-by-side layout */
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    text-align: center;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .wallet-container {
+    padding: 10px;
+  }
+  
+  .connect-prompt {
+    margin-top: 50px;
+    padding: 30px 20px;
+  }
+  
+  /* Stack panels vertically on smaller screens */
+  .content-container {
+    flex-direction: column;
+  }
+  
+  .left-panel,
+  .right-panel {
+    width: 100%;
+  }
+  
+  /* Add some spacing between panels when stacked */
+  .left-panel {
+    margin-bottom: 20px;
   }
 }
